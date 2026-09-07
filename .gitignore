@@ -1,0 +1,21 @@
+﻿## Visual Studio / .NET
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# JetBrains Rider / VS Code
+.idea/
+.vscode/
+
+# Packages
+*.nupkg
+packages/
+
+# OS generated files
+.DS_Store
+Thumbs.db

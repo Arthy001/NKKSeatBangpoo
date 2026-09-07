@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="NKKSeatBangpoo.Pages.DashboardPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="📊 Daily Operations Dashboard"
+    BackgroundColor="#0F0F1E">
+
+    <Grid RowDefinitions="Auto,*" Padding="24">
+        
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="📊 Daily Summary Today" FontSize="26" FontAttributes="Bold" TextColor="White"/>
+                <Label x:Name="LblLastUpdate" Text="Last Updated: --:--:--" FontSize="12" TextColor="#8888BB"/>
+            </VerticalStackLayout>
+            <Button Grid.Column="1" Text="🔄 Refresh" 
+                    BackgroundColor="#2E2E7E" TextColor="White"
+                    CornerRadius="8" Padding="15,0" HeightRequest="40"
+                    Clicked="OnRefreshClicked"/>
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="24">
+                
+                <!-- 1. OVERALL TOTALS -->
+                <Label Text="🏢 ตัวเลขสรุปภาพรวมทั้งหมดวันนี้" FontSize="16" FontAttributes="Bold" TextColor="#AAAACC"/>
+                
+                <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+                    <!-- Total Orders -->
+                    <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#1A1A35" StrokeShape="RoundRectangle 12" Stroke="#333366" Padding="15">
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                            <Label Text="📑 ออเดอร์ทั้งหมด" FontSize="11" TextColor="#8888BB" HorizontalOptions="Center"/>
+                            <Label x:Name="OverallOrders" Text="0" FontSize="28" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <!-- Total Target -->
+                    <Border Grid.Row="0" Grid.Column="1" BackgroundColor="#1A1A35" StrokeShape="RoundRectangle 12" Stroke="#333366" Padding="15">
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                            <Label Text="🎯 ต้องผลิตทั้งหมด" FontSize="11" TextColor="#8888BB" HorizontalOptions="Center"/>
+                            <Label x:Name="OverallTarget" Text="0" FontSize="28" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <!-- Remaining -->
+                    <Border Grid.Row="0" Grid.Column="2" BackgroundColor="#2A1A1A" StrokeShape="RoundRectangle 12" Stroke="#552222" Padding="15">
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                            <Label Text="📉 คงค้างผลิต" FontSize="11" TextColor="#CC8888" HorizontalOptions="Center"/>
+                            <Label x:Name="OverallRemaining" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#FF6666" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Registered (Produced) -->
+                    <Border Grid.Row="1" Grid.Column="0" BackgroundColor="#1A2035" StrokeShape="RoundRectangle 12" Stroke="#335588" Padding="15">
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                            <Label Text="✅ ผลิตเสร็จ (ผูกบัตร)" FontSize="11" TextColor="#88AACC" HorizontalOptions="Center"/>
+                            <Label x:Name="OverallProduced" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#4488FF" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <!-- Registered Today (Scan Count) -->
+                    <Border Grid.Row="1" Grid.Column="1" BackgroundColor="#2A231A" StrokeShape="RoundRectangle 12" Stroke="#554422" Padding="15">
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                            <Label Text="🔁 จำนวนที่ Register" FontSize="11" TextColor="#CCAA88" HorizontalOptions="Center"/>
+                            <Label x:Name="OverallRegistered" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#FF8844" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <!-- In-Stock -->
+                    <Border Grid.Row="1" Grid.Column="2" BackgroundColor="#1A2A1A" StrokeShape="RoundRectangle 12" Stroke="#225522" Padding="15">
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                            <Label Text="📦 รับเข้าคลังแล้ว" FontSize="11" TextColor="#88CC88" HorizontalOptions="Center"/>
+                            <Label x:Name="OverallInStock" Text="0" FontSize="28" FontAttributes="Bold" TextColor="#44DD66" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- 2. SEAT TYPE SUMMARY LIST -->
+                <Label Text="🏢 สรุปแยกตามประเภทเบาะ (ISUZU / TOYOTA)" FontSize="16" FontAttributes="Bold" TextColor="#AAAACC" Margin="0,10,0,0"/>
+                
+                <CollectionView x:Name="CompanySummaryList">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="16"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BackgroundColor="#16162A" StrokeShape="RoundRectangle 12" Stroke="#333366" Padding="20">
+                                <VerticalStackLayout Spacing="12">
+                                    <!-- Header -->
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="{Binding SeatTypeName}" FontSize="18" FontAttributes="Bold" TextColor="White"/>
+                                        <Label Grid.Column="1" Text="{Binding OrderCount, StringFormat='{0} Orders'}" TextColor="#8888BB" FontSize="12" VerticalOptions="Center"/>
+                                    </Grid>
+                                    
+                                    <!-- Stats Grid -->
+                                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                            <Label Text="เป้าหมาย" FontSize="10" TextColor="#8888BB"/>
+                                            <Label Text="{Binding TargetQty}" FontSize="16" FontAttributes="Bold" TextColor="White"/>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                                            <Label Text="ผลิตแล้ว" FontSize="10" TextColor="#8888BB"/>
+                                            <Label Text="{Binding ProducedQty}" FontSize="16" FontAttributes="Bold" TextColor="#4488FF"/>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="2">
+                                            <Label Text="คงค้าง" FontSize="10" TextColor="#CC8888"/>
+                                            <Label Text="{Binding RemainingQty}" FontSize="16" FontAttributes="Bold" TextColor="#FF6666"/>
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                                            <Label Text="Register" FontSize="10" TextColor="#8888BB"/>
+                                            <Label Text="{Binding ProducedQty}" FontSize="16" FontAttributes="Bold" TextColor="#FF8844"/>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                                            <Label Text="เข้าคลัง" FontSize="10" TextColor="#8888BB"/>
+                                            <Label Text="{Binding InStockQty}" FontSize="16" FontAttributes="Bold" TextColor="#44DD66"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <!-- Progress Bar -->
+                                    <ProgressBar Progress="{Binding ProgressPct}" 
+                                                 ProgressColor="{Binding ProgressColor}"
+                                                 ScaleY="1.5"
+                                                 VerticalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- 3. HOURLY CHART (Keep it as it's useful) -->
+                <Border BackgroundColor="#16162A" StrokeShape="RoundRectangle 12" Stroke="#333366" Padding="20">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="🕒 สถิติการผ่านประตูรายชั่วโมง (วันนี้)" FontSize="16" FontAttributes="Bold" TextColor="White"/>
+                        <FlexLayout x:Name="ChartContainer" 
+                                    Direction="Row" JustifyContent="SpaceBetween" AlignItems="End"
+                                    HeightRequest="180" Margin="0,10,0,0">
+                        </FlexLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+        
+        <!-- Loading Overlay -->
+        <Grid x:Name="LoadingOverlay" Grid.RowSpan="2" BackgroundColor="#AA000000" IsVisible="False">
+            <ActivityIndicator IsRunning="True" Color="#4488FF" VerticalOptions="Center" HorizontalOptions="Center"/>
+        </Grid>
+
+    </Grid>
+</ContentPage>

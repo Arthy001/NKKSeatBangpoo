@@ -1,0 +1,65 @@
+=== Scanning Excel files in Templates folder ===
+
+========================================
+FILE: MasterData-08-25-2025.xlsx
+========================================
+
+--- Sheet: "Isuzu Delivery System" ---
+    Used Range: A1:Q743
+    Row  1: [Col1]ISUZU KANBAN PI MASTER
+    Row  3: [Col14]Print Date: 25-08-2025 13:19
+    Row  4: [Col1]NHK Part | [Col2]Isuzu Part | [Col3]Part Name | [Col4]Model | [Col5]Type | [Col6]Cover | [Col7]Code | [Col8]Barcode PI | [Col9]Line ID | [Col10]Seat Type ID | [Col11]Main Part Flag | [Col12]Kanban | [Col13]WeldingBackNo | [Col14]WeldingCusionNo | [Col15]WeldBack | [Col16]WeldCusion | [Col17]Sawing
+    Row  5: [Col1]NI2001-10000 | [Col2]8974780817 | [Col3]FR SEAT RH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LK | [Col7]FK18 | [Col8]8974780817 | [Col9]FR | [Col10]FR. Seat RH. | [Col11]MAIN PART | [Col12]FK18RH
+    Row  6: [Col1]NI2001-10000 | [Col2]8974780817 | [Col3]FR SEAT RH | [Col4]RJ01 | [Col5]NORMAL | [Col6]8LK | [Col7]FK29 | [Col8]8974780817 | [Col9]FR | [Col10]FR. Seat RH. | [Col11]MAIN PART | [Col12]FK29RH | [Col13]0 | [Col14]0 | [Col15]0 | [Col16]0 | [Col17]False
+    Row  7: [Col1]NI2001-20000 | [Col2]8974781067 | [Col3]FR SEAT LH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LK | [Col7]FK18 | [Col8]8974781067 | [Col9]FR | [Col10]FR. Seat LH. | [Col11]MAIN PART | [Col12]FK18LH
+    Row  8: [Col1]NI2003-10000 | [Col2]8974781157 | [Col3]FR SEAT RH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LK | [Col7]FK22 | [Col8]8974781157 | [Col9]FR | [Col10]FR. Seat RH. | [Col11]MAIN PART | [Col12]FK22RH
+    Row  9: [Col1]NI2003-10000 | [Col2]8974781157 | [Col3]FR SEAT RH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LK | [Col7]FK20 | [Col8]8974781157 | [Col9]FR | [Col10]FR. Seat RH. | [Col11]MAIN PART | [Col12]FK20RH | [Col13]0 | [Col14]0 | [Col15]0 | [Col16]0 | [Col17]False
+    Row 10: [Col1]NI2003-20000 | [Col2]8974780927 | [Col3]FR SEAT LH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LK | [Col7]FK16 | [Col8]8974780927 | [Col9]FR | [Col10]FR. Seat LH. | [Col11]MAIN PART | [Col12]FK16LH
+    Row 11: [Col1]NI2003-20000 | [Col2]8974780927 | [Col3]FR SEAT LH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LK | [Col7]FK25 | [Col8]8974780927 | [Col9]FR | [Col10]FR. Seat LH. | [Col11]MAIN PART | [Col12]FK25LH
+    Row 12: [Col1]NI2003-20000 | [Col2]8974780927 | [Col3]FR SEAT LH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LK | [Col7]FK22 | [Col8]8974780927 | [Col9]FR | [Col10]FR. Seat LH. | [Col11]MAIN PART | [Col12]FK22LH
+    Row 13: [Col1]NI2003-20000 | [Col2]8974780927 | [Col3]FR SEAT LH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LK | [Col7]FK04 | [Col8]8974780927 | [Col9]FR | [Col10]FR. Seat LH. | [Col11]MAIN PART | [Col12]FK04LH
+    Row 14: [Col1]NI2005-10000 | [Col2]8974780808 | [Col3]FR SEAT RH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LJ | [Col7]FJ09 | [Col8]8974780808 | [Col9]FR | [Col10]FR. Seat RH. | [Col11]MAIN PART | [Col12]FJ09RH
+    Row 15: [Col1]NI2005-10000 | [Col2]8974780808 | [Col3]FR SEAT RH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LJ | [Col7]FJ05 | [Col8]8974780808 | [Col9]FR | [Col10]FR. Seat RH. | [Col11]MAIN PART | [Col12]FJ05RH | [Col13]0 | [Col14]0 | [Col15]0 | [Col16]0 | [Col17]False
+    Row 16: [Col1]NI2005-10000 | [Col2]8974780808 | [Col3]FR SEAT RH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LJ | [Col7]FJ03 | [Col8]8974780808 | [Col9]FR | [Col10]FR. Seat RH. | [Col11]MAIN PART | [Col12]FJ03RH
+    Row 17: [Col1]NI2005-10000 | [Col2]8974780808 | [Col3]FR SEAT RH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LJ | [Col7]FJ01 | [Col8]8974780808 | [Col9]FR | [Col10]FR. Seat RH. | [Col11]MAIN PART | [Col12]FJ01RH
+    Row 18: [Col1]NI2005-20000 | [Col2]8974781057 | [Col3]FR SEAT LH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LJ | [Col7]FJ03 | [Col8]8974781057 | [Col9]FR | [Col10]FR. Seat LH. | [Col11]MAIN PART | [Col12]FJ03LH
+    Row 19: [Col1]NI2007-20000 | [Col2]8974780918 | [Col3]FR SEAT LH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LJ | [Col7]FJ04 | [Col8]8974780918 | [Col9]FR | [Col10]FR. Seat LH. | [Col11]MAIN PART | [Col12]FJ04LH
+    Row 20: [Col1]NI2007-20000 | [Col2]8974780918 | [Col3]FR SEAT LH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LJ | [Col7]FJ02 | [Col8]8974780918 | [Col9]FR | [Col10]FR. Seat LH. | [Col11]MAIN PART | [Col12]FJ02LH
+    Row 21: [Col1]NI2007-20000 | [Col2]8974780918 | [Col3]FR SEAT LH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LJ | [Col7]FJ10 | [Col8]8974780918 | [Col9]FR | [Col10]FR. Seat LH. | [Col11]MAIN PART | [Col12]FJ10LH | [Col13]0 | [Col14]0 | [Col15]0 | [Col16]0 | [Col17]False
+    Row 22: [Col1]NI2009-20000 | [Col2]8974797019 | [Col3]FR SEAT LH | [Col4]RG01 | [Col5]NORMAL | [Col6]8LK | [Col7]FK21 | [Col8]8974797019 | [Col9]FR | [Col10]FR. Seat LH. | [Col11]MAIN PART | [Col12]FK21LH
+    Row 23: [Col1]NI2015-30000 | [Col2]8974713899 | [Col3]RR SEAT SET | [Col4]RG01 | [Col5]G-LEATHER | [Col6]6TB | [Col7]RB03 | [Col8]8974713899 | [Col9]RR | [Col10]RR. Seat Set | [Col11]MAIN PART | [Col12]RB03RR
+    Row 24: [Col1]NI2015-30010 | [Col2]8974718261 | [Col3]ANCHOR ASM;TOP T | [Col4]RG01 | [Col5]PART | [Col6]BLACK | [Col7]C261 | [Col8]8974718261 | [Col9]No Send | [Col11]MAIN PART | [Col12]036336C261
+    Row 25: [Col1]NI2015-30020 | [Col2]8974992580 | [Col3]ANCHOR ASM;TOP T | [Col4]RG01 | [Col5]PART | [Col6]BEIGE | [Col7]C580 | [Col8]8974992580 | [Col9]No Send | [Col11]MAIN PART
+    ... Total rows in sheet: 743, Total cols: 17
+
+========================================
+FILE: Work Order ISUZU Sample Template.xlsx
+========================================
+
+--- Sheet: "Sheet1" ---
+    Used Range: A2:L241
+    Row  2: [Col4]WORKING ORDER OF KANBAN
+    Row  3: [Col10]Page: | [Col11]1
+    Row  4: [Col1]WORK-CENTER: | [Col3]12310800 BP SEAT COVERING 1 | [Col10]MADE: | [Col11]8-25-2025 | [Col12]Aug-25
+    Row  5: [Col1]DUE DATE: | [Col3]8-25-2025 | [Col11]16:03 | [Col12]2:51
+    Row  6: [Col1]ORDER NO.: | [Col3]S0008859
+    Row  7: [Col1]SITE: | [Col3]122
+    Row  8: [Col1]ORDER DATE: | [Col3]8-25-2025
+    Row  9: [Col3] | [Col4]R46 | [Col5]3S000885 | [Col6]90 | [Col7]1
+    Row 10: [Col1]e
+    Row 12: [Col10]Production
+    Row 13: [Col1]Code No. | [Col2]Ln. | [Col3]Item Number | [Col4]Slip | [Col5]Kanban No | [Col6]K/B No. | [Col7]QTY Kanban | [Col8]QTY Pallet | [Col9]QTY PCS | [Col10]QTY | [Col11]Package | [Col12]User ID
+    Row 14: [Col1]-------- | [Col2]--- | [Col3]------------------ | [Col4]---- | [Col5]--------- | [Col6]---- | [Col7]---------- | [Col8]---------- | [Col9]----- | [Col10]---------- | [Col11]-------- | [Col12]--------
+    Row 15: [Col1]ISSE5659 | [Col2]1 | [Col3]NI2761-10000 | [Col4]1 | [Col5]45877 | [Col6]7 | [Col7]1 | [Col8]15 | [Col9]15 | [Col11]PALLET | [Col12]2djarun
+    Row 16: [Col3]SEAT ASM;FRONT RH (DR)RG14
+    Row 17: [Col1]ISSE5659 | [Col2]2 | [Col3]NI2761-10000 | [Col4]1 | [Col5]45877 | [Col6]8 | [Col7]1 | [Col8]15 | [Col9]15 | [Col11]PALLET | [Col12]2djarun
+    Row 18: [Col3]SEAT ASM;FRONT RH (DR)RG14
+    Row 19: [Col1]ISSE5660 | [Col2]3 | [Col3]NI2819-20000 | [Col4]1 | [Col5]45878 | [Col6]2 | [Col7]1 | [Col8]15 | [Col9]15 | [Col11]PALLET | [Col12]2djarun
+    Row 20: [Col3]SEAT ASM;FRONT LH(PS)RG14
+    Row 21: [Col1]ISSE5660 | [Col2]4 | [Col3]NI2819-20000 | [Col4]1 | [Col5]45878 | [Col6]10 | [Col7]1 | [Col8]15 | [Col9]15 | [Col11]PALLET | [Col12]2djarun
+    Row 22: [Col3]SEAT ASM;FRONT LH(PS)RG14
+    Row 23: [Col1]ISSE5831 | [Col2]5 | [Col3]NI2745-10000 | [Col4]1 | [Col5]46434 | [Col6]16 | [Col7]1 | [Col8]15 | [Col9]15 | [Col11]PALLET | [Col12]2djarun
+    Row 24: [Col3]SEAT ASM;FRONT RH(DR)I-RG14
+    Row 25: [Col1]ISSE5831 | [Col2]6 | [Col3]NI2745-10000 | [Col4]1 | [Col5]46434 | [Col6]14 | [Col7]1 | [Col8]15 | [Col9]15 | [Col11]PALLET | [Col12]2djarun
+    ... Total rows in sheet: 241, Total cols: 12
+

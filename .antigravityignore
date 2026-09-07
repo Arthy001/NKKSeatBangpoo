@@ -1,0 +1,26 @@
+# Build and temporary files
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE files
+.idea/
+.vscode/
+
+# Packages
+packages/
+node_modules/
+.gradle/
+
+# Large files
+*.exe
+*.dll
+*.pdb
+*.nupkg
+
+# Git
+.git/

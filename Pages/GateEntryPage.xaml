@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="NKKSeatBangpoo.Pages.GateEntryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="📡 RFID Gate Entry"
+    BackgroundColor="#0F0F25"
+    Loaded="OnPageLoaded"
+    Unloaded="OnPageUnloaded">
+
+    <Grid>
+        <Grid RowDefinitions="Auto, *, Auto" Padding="20" RowSpacing="15">
+        
+        <!-- Header & Reader Control -->
+        <Border Grid.Row="0" BackgroundColor="#1E1E40" StrokeShape="RoundRectangle 10" Padding="20,10,20,10">
+            <Grid ColumnDefinitions="*, Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="📡 Gate Entry Scanner" FontSize="26" FontAttributes="Bold" TextColor="White"/>
+                </VerticalStackLayout>
+                
+                <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+                    <Entry x:Name="textEpc" WidthRequest="350"></Entry>
+                    <Button x:Name="AddEpc" Text="Add Epc" Clicked="AddEpc_Clicked"></Button>
+                    <Button x:Name="BtnSetting" Text="⚙️ Setting" BackgroundColor="#2A2A5E" TextColor="White" Clicked="OnSettingClicked" WidthRequest="110"/>
+                    <Button x:Name="BtnConnect" Text="Connect" BackgroundColor="#2E7D4F" TextColor="White" Clicked="OnConnectClicked" WidthRequest="100"/>
+                    <Button x:Name="BtnDisconnect" Text="Disconnect" BackgroundColor="#555555" TextColor="White" Clicked="OnDisconnectClicked" WidthRequest="110" IsEnabled="False"/>
+                    <Ellipse x:Name="LedStatus" WidthRequest="32" HeightRequest="32" Fill="#555555" Margin="10,0,0,0"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Data Grid -->
+        <Grid Grid.Row="1" RowDefinitions="Auto, *">
+            <Border Grid.Row="0" BackgroundColor="#2A2A5E" StrokeShape="RoundRectangle 8" Padding="15,10" Margin="0,0,0,5">
+                <Grid ColumnDefinitions="*, 120, *, 60, 100, 100, 100, 60, 100, 100">
+                    <Label Grid.Column="0" Text="Card No / EPC" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11"/>
+                    <Label Grid.Column="1" Text="Order No" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11"/>
+                    <Label Grid.Column="2" Text="Part No / Name" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11"/>
+                    <Label Grid.Column="3" Text="Ln" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                    <Label Grid.Column="4" Text="Code" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                    <Label Grid.Column="5" Text="KB" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                    <Label Grid.Column="6" Text="Kanban No" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                    <Label Grid.Column="7" Text="Qty" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                    <Label Grid.Column="8" Text="Time" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                    <Label Grid.Column="9" Text="Status" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                </Grid>
+            </Border>
+
+            <CollectionView Grid.Row="1" x:Name="ScanList" BackgroundColor="Transparent">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,4" BackgroundColor="{Binding RowColor}" StrokeThickness="0" StrokeShape="RoundRectangle 6" Padding="15,10">
+                            <Grid ColumnDefinitions="*, 120, *, 60, 100, 100, 100, 60, 100, 100" VerticalOptions="Center">
+                                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="0">
+                                    <Label Text="{Binding CardNo}" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                                    <Label Text="{Binding EpcDisplay}" TextColor="#8888AA" FontSize="10"/>
+                                </VerticalStackLayout>
+                                <Label Grid.Column="1" Text="{Binding OrderNo}" TextColor="#DDDDDD" FontSize="14" VerticalOptions="Center"/>
+                                
+                                <VerticalStackLayout Grid.Column="2" VerticalOptions="Center">
+                                    <Label Text="{Binding PartNo}" TextColor="White" FontAttributes="Bold" FontSize="14"/>
+                                    <Label Text="{Binding PartName}" TextColor="#8888AA" FontSize="10" LineBreakMode="TailTruncation"/>
+                                </VerticalStackLayout>
+                                
+                                <Label Grid.Column="3" Text="{Binding LineNo}" TextColor="White" VerticalOptions="Center" HorizontalOptions="Center" FontSize="14"/>
+                                <Label Grid.Column="4" Text="{Binding CodeNo}" TextColor="#CCCCEE" VerticalOptions="Center" HorizontalOptions="Center" FontSize="14"/>
+                                <Label Grid.Column="5" Text="{Binding KBNo}" TextColor="#CCCCEE" VerticalOptions="Center" HorizontalOptions="Center" FontSize="14"/>
+                                <Label Grid.Column="6" Text="{Binding KanbanNo}" TextColor="#CCCCEE" VerticalOptions="Center" HorizontalOptions="Center" FontSize="14"/>
+                                <Label Grid.Column="7" Text="{Binding QtyPerSet}" TextColor="#88FF88" VerticalOptions="Center" HorizontalOptions="Center" FontSize="14" FontAttributes="Bold"/>
+                                
+                                <Label Grid.Column="8" Text="{Binding ReadTimeStr}" TextColor="#AAAAAA" FontSize="12" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                <Border Grid.Column="9" BackgroundColor="{Binding StatusColor}" Padding="6,2" StrokeShape="RoundRectangle 5" StrokeThickness="0" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding Status}" TextColor="White" FontSize="8" FontAttributes="Bold"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!-- Bottom Bar: Actions & Stats -->
+        <Grid Grid.Row="2" ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" HeightRequest="60">
+            <!-- Col 0: Clear Button -->
+            <Button Grid.Column="0" Text="🗑️ Clear List" BackgroundColor="#AA3333" TextColor="White" WidthRequest="110" VerticalOptions="Fill" Clicked="OnClearClicked"/>
+            
+            <!-- Col 1: Card Stats -->
+            <Grid Grid.Column="1" ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
+                
+                <!-- 0. New Scans -->
+                <Border Grid.Column="0" BackgroundColor="#1A2A3A" Stroke="#4488AA" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="5">
+                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="🏷️ Scan" TextColor="#AADDFF" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label x:Name="LblNewScans" Text="0" FontAttributes="Bold" TextColor="White" FontSize="18" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- 1. Already In-Stock -->
+                <Border Grid.Column="1" BackgroundColor="#2A2A00" Stroke="#AAAA00" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="5">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnInStockCardTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="📦 In Stock (ซ้ำ)" TextColor="#FFFF88" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label x:Name="LblInStock" Text="0" FontAttributes="Bold" TextColor="White" FontSize="18" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- 2. Not Registered -->
+                <Border Grid.Column="2" BackgroundColor="#2A1A00" Stroke="#FF8800" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="5">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNotRegisteredCardTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="⚠️ Not Reg" TextColor="#FFCC88" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label x:Name="LblNotReg" Text="0" FontAttributes="Bold" TextColor="White" FontSize="18" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- 3. Unknown -->
+                <Border Grid.Column="3" BackgroundColor="#2A0000" Stroke="#FF4444" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="5">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnUnknownCardTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="0" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="❓ Unknown" TextColor="#FFAAAA" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label x:Name="LblUnknown" Text="0" FontAttributes="Bold" TextColor="White" FontSize="18" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Col 2: Actions -->
+            <HorizontalStackLayout Grid.Column="2" Spacing="10">
+                <Button Text="💾 Confirm Stock In" BackgroundColor="#44AA66" TextColor="White" FontAttributes="Bold" WidthRequest="160" VerticalOptions="Fill" Clicked="OnStockInClicked"/>
+                <Button Text="📤 Export" BackgroundColor="#3D3D9E" TextColor="White" FontAttributes="Bold" WidthRequest="100" VerticalOptions="Fill" Clicked="OnExportClicked"/>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- Loading -->
+        <ActivityIndicator x:Name="LoadingIndicator" Grid.RowSpan="3" IsVisible="False" IsRunning="False" Color="#44AA66" VerticalOptions="Center" HorizontalOptions="Center" Scale="2"/>
+
+    </Grid>
+
+    <!-- Overlay Popup -->
+    <Grid x:Name="OverlayPopup" BackgroundColor="#CC000000" IsVisible="False" Padding="30">
+        <Border BackgroundColor="#1E1E40" Stroke="#4444AA" StrokeThickness="1" StrokeShape="RoundRectangle 15" Padding="20">
+            <Grid RowDefinitions="Auto, *, Auto">
+                <HorizontalStackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,15">
+                    <Label x:Name="LblPopupTitle" Text="Status List" FontSize="20" FontAttributes="Bold" TextColor="White" VerticalOptions="Center"/>
+                    <Label x:Name="LblPopupCount" Text="(0)" FontSize="16" TextColor="#AADDFF" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+                
+                <CollectionView Grid.Row="1" x:Name="PopupList" BackgroundColor="Transparent">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,4" BackgroundColor="#2A2A5E" StrokeThickness="0" StrokeShape="RoundRectangle 6" Padding="15,10">
+                                <Grid ColumnDefinitions="280, *, 120" VerticalOptions="Center">
+                                    <Label Grid.Column="0" Text="{Binding EpcDisplay}" TextColor="White" FontSize="12" VerticalOptions="Center" FontAttributes="Bold"/>
+                                    <Label Grid.Column="1" Text="{Binding PartNo}" TextColor="#DDDDDD" FontSize="13" VerticalOptions="Center"/>
+                                    <Label Grid.Column="2" Text="{Binding ReadTimeStr}" TextColor="#AAAAAA" FontSize="12" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button Grid.Row="2" Text="Close" BackgroundColor="#AA3333" TextColor="White" WidthRequest="120" HorizontalOptions="Center" Margin="0,15,0,0" Clicked="OnClosePopupClicked"/>
+            </Grid>
+        </Border>
+    </Grid>
+
+    <!-- Settings Popup -->
+    <Grid x:Name="SettingPopup" BackgroundColor="#CC000000" IsVisible="False" Padding="30">
+        <Border BackgroundColor="#1E1E40" Stroke="#4488AA" StrokeThickness="1" StrokeShape="RoundRectangle 15" Padding="30" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="400">
+            <Grid RowDefinitions="Auto, *, Auto">
+                <Label Grid.Row="0" Text="⚙️ Setting Antenna Power" FontSize="20" FontAttributes="Bold" TextColor="White" Margin="0,0,0,20" HorizontalOptions="Center"/>
+                
+                <VerticalStackLayout Grid.Row="1" Spacing="15">
+                    <!-- IP Address -->
+                    <Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+                        <Label Grid.Column="0" Text="Reader IP Address:" TextColor="#AADDFF" FontAttributes="Bold" VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" x:Name="EntryIp" Text="192.168.1.104" WidthRequest="180" TextColor="White" BackgroundColor="#0F0F2D" HorizontalTextAlignment="Center"/>
+                    </Grid>
+                    
+                    <BoxView HeightRequest="1" Color="#4444AA" Margin="0,5"/>
+
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Grid.Column="0" Text="Antenna 1 Power (dBm):" TextColor="White" VerticalOptions="Center"/>
+                        <Picker Grid.Column="1" x:Name="PickerAnt1" TextColor="White" BackgroundColor="#2A2A5E" WidthRequest="100"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Grid.Column="0" Text="Antenna 2 Power (dBm):" TextColor="White" VerticalOptions="Center"/>
+                        <Picker Grid.Column="1" x:Name="PickerAnt2" TextColor="White" BackgroundColor="#2A2A5E" WidthRequest="100"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Grid.Column="0" Text="Antenna 3 Power (dBm):" TextColor="White" VerticalOptions="Center"/>
+                        <Picker Grid.Column="1" x:Name="PickerAnt3" TextColor="White" BackgroundColor="#2A2A5E" WidthRequest="100"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Grid.Column="0" Text="Antenna 4 Power (dBm):" TextColor="White" VerticalOptions="Center"/>
+                        <Picker Grid.Column="1" x:Name="PickerAnt4" TextColor="White" BackgroundColor="#2A2A5E" WidthRequest="100"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="#4444AA" Margin="0,5"/>
+
+                    <!-- Export Folder Path -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Export Folder Path:" TextColor="#AADDFF" FontAttributes="Bold"/>
+                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                            <Entry Grid.Column="0" x:Name="EntryExportPath" TextColor="White" BackgroundColor="#0F0F2D" FontSize="12" IsReadOnly="True" Placeholder="เลือกโฟลเดอร์สำหรับ Export CSV..."/>
+                            <Button Grid.Column="1" Text="📂 Browse" BackgroundColor="#3D3D9E" TextColor="White" Clicked="OnBrowseFolderClicked" WidthRequest="100" Padding="0"/>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="#4444AA" Margin="0,5"/>
+
+                    <!-- Domain Credentials -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Domain Credentials (Optional for Network Path):" TextColor="#AADDFF" FontAttributes="Bold"/>
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Username" TextColor="White" FontSize="10"/>
+                                <Entry x:Name="EntryDomainUsername" TextColor="White" BackgroundColor="#0F0F2D" FontSize="12" Placeholder="Username..."/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="Password" TextColor="White" FontSize="10"/>
+                                <Entry x:Name="EntryDomainPassword" TextColor="White" BackgroundColor="#0F0F2D" FontSize="12" IsPassword="True" Placeholder="Password..."/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Row="2" Spacing="15" HorizontalOptions="Center" Margin="0,25,0,0">
+                    <Button Text="💾 Save" BackgroundColor="#44AA66" TextColor="White" WidthRequest="120" Clicked="OnSaveSettingClicked"/>
+                    <Button Text="Cancel" BackgroundColor="#555555" TextColor="White" WidthRequest="100" Clicked="OnCloseSettingClicked"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+    </Grid>
+
+    <!-- Toast Notification -->
+    <Frame x:Name="ToastNotification" 
+           Grid.RowSpan="3"
+           BackgroundColor="#FF3333" 
+           BorderColor="White"
+           CornerRadius="10" 
+           HasShadow="True"
+           Padding="20,10"
+           HorizontalOptions="Center" 
+           VerticalOptions="Start" 
+           Margin="0,50,0,0"
+           IsVisible="False"
+           InputTransparent="True"
+           ZIndex="100">
+        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+            <Label x:Name="ToastIcon" Text="⚠️" FontSize="20" VerticalOptions="Center"/>
+            <Label x:Name="ToastMessage" Text="Notification Message" TextColor="White" FontAttributes="Bold" FontSize="16" VerticalOptions="Center"/>
+        </HorizontalStackLayout>
+    </Frame>
+
+    </Grid>
+</ContentPage>

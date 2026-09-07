@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NKKSeatBangpoo.Pages.CardMasterPage"
+             Title="RFID Card Master"
+             BackgroundColor="#121225"
+             Appearing="OnPageLoaded">
+
+    <Grid>
+        <!-- Main Content -->
+        <Grid RowDefinitions="Auto, *" Padding="20" RowSpacing="15">
+            
+            <!-- Header & Statistics -->
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                <HorizontalStackLayout Grid.Column="0" Spacing="20" VerticalOptions="Center">
+                    <VerticalStackLayout>
+                        <Label Text="RFID Card Master" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                        <Label Text="จัดการทะเบียนบัตร RFID ในระบบ" TextColor="#8888AA" FontSize="12"/>
+                    </VerticalStackLayout>
+                    <Border BackgroundColor="#1A1A3F" Padding="15,5" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="จำนวนบัตรทั้งหมด:" TextColor="#AAAACC" VerticalOptions="Center"/>
+                            <Label x:Name="LblTotalCards" Text="0" FontSize="20" FontAttributes="Bold" TextColor="#44DD88" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Button Grid.Column="1" Text="➕ New Card" 
+                        BackgroundColor="#2E7D4F" TextColor="White" 
+                        FontAttributes="Bold" Padding="20,0" HeightRequest="45"
+                        Clicked="OnNewCardClicked"/>
+            </Grid>
+
+            <!-- List Area -->
+            <Grid Grid.Row="1" RowDefinitions="Auto, *">
+                <Grid Grid.Row="0" ColumnDefinitions="2*, 1*, 1.5*, 1*, Auto" Padding="10,5" BackgroundColor="#2A2A5E">
+                    <Label Grid.Column="0" Text="Tag EPC" FontAttributes="Bold" TextColor="White"/>
+                    <Label Grid.Column="1" Text="Card No" FontAttributes="Bold" TextColor="White"/>
+                    <Label Grid.Column="2" Text="Status" FontAttributes="Bold" TextColor="White"/>
+                    <Label Grid.Column="3" Text="Reg. Date" FontAttributes="Bold" TextColor="White"/>
+                    <Label Grid.Column="4" Text="Action" FontAttributes="Bold" TextColor="White" WidthRequest="60" HorizontalTextAlignment="Center"/>
+                </Grid>
+
+                <CollectionView Grid.Row="1" x:Name="CardList" Margin="0,5,0,0">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,5" BackgroundColor="#1A1A35" StrokeThickness="0" StrokeShape="RoundRectangle 8">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnRowTapped" CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="2*, 1*, 1.5*, 1*, Auto" Padding="10" VerticalOptions="Center">
+                                    <Label Grid.Column="0" Text="{Binding TagEPC}" TextColor="#CCCCEE" VerticalOptions="Center" FontSize="13"/>
+                                    <Label Grid.Column="1" Text="{Binding CardNo}" TextColor="White" FontAttributes="Bold" VerticalOptions="Center"/>
+                                    
+                                    <Border Grid.Column="2" BackgroundColor="{Binding StatusBgColor}" 
+                                            Padding="8,2" HorizontalOptions="Start" StrokeShape="RoundRectangle 5" StrokeThickness="0">
+                                        <Label Text="{Binding CurrentStatus}" TextColor="White" FontSize="11" FontAttributes="Bold"/>
+                                    </Border>
+
+                                    <Label Grid.Column="3" Text="{Binding RegDateStr}" TextColor="#8888AA" FontSize="12" VerticalOptions="Center"/>
+                                    
+                                    <HorizontalStackLayout Grid.Column="4" Spacing="5" VerticalOptions="Center">
+                                        <Button Text="�️" BackgroundColor="Transparent" 
+                                                TextColor="#FF5555" FontSize="16" WidthRequest="40" Padding="0"
+                                                Clicked="OnDeleteClicked" CommandParameter="{Binding .}"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <ActivityIndicator x:Name="LoadingIndicator" Grid.RowSpan="2" 
+                               IsVisible="False" IsRunning="False"
+                               HorizontalOptions="Center" VerticalOptions="Center" Color="#44DD88" Scale="2"/>
+        </Grid>
+
+        <!-- ADD CARD POPUP -->
+        <Grid x:Name="AddPopup" BackgroundColor="#CC000000" IsVisible="False" Padding="20">
+            <Border BackgroundColor="#1C1C3E" Stroke="#3D3D9E" StrokeThickness="1" 
+                    Padding="30" StrokeShape="RoundRectangle 20"
+                    VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="450">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="➕ Register New RFID Card" FontSize="20" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                    
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Scan RFID Tag (EPC)" TextColor="#AAAACC" FontSize="12"/>
+                        <Entry x:Name="AddTagEpc" Placeholder="Scan RFID Tag Here..." 
+                               TextColor="White" BackgroundColor="#0F0F2D" HeightRequest="50"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="หมายเลขบัตร (Card No)" TextColor="#AAAACC" FontSize="12"/>
+                        <Entry x:Name="AddCardNo" Placeholder="เช่น 001" 
+                               TextColor="White" BackgroundColor="#0F0F2D" HeightRequest="50"/>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15" Margin="0,10,0,0">
+                        <Button Grid.Column="0" Text="Save Card" BackgroundColor="#2E7D4F" TextColor="White" FontAttributes="Bold" Clicked="OnSaveNewClicked"/>
+                        <Button Grid.Column="1" Text="Cancel" BackgroundColor="#555555" TextColor="White" Clicked="OnCloseAddClicked"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+        <!-- EDIT CARD POPUP -->
+        <Grid x:Name="EditPopup" BackgroundColor="#CC000000" IsVisible="False" Padding="20">
+            <Border BackgroundColor="#1C1C3E" Stroke="#AA8855" StrokeThickness="1" 
+                    Padding="30" StrokeShape="RoundRectangle 20"
+                    VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="450">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="📝 Edit RFID Card" FontSize="20" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                    
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="RFID Tag (EPC)" TextColor="#8888AA" FontSize="12"/>
+                        <Label x:Name="EditTagEpcLabel" Text="EPC-VALUE-HERE" TextColor="#AADDFF" FontSize="14" FontAttributes="Bold" Margin="5,0"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="หมายเลขบัตร (Card No)" TextColor="#AAAACC" FontSize="12"/>
+                        <Entry x:Name="EditCardNo" Placeholder="เช่น 001" 
+                               TextColor="White" BackgroundColor="#0F0F2D" HeightRequest="50"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="สถานะบัตร (Status)" TextColor="#AAAACC" FontSize="12"/>
+                        <Picker x:Name="EditStatusPicker" TextColor="White" BackgroundColor="#0F0F2D" HeightRequest="50">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Available</x:String>
+                                    <x:String>In-Use</x:String>
+                                    <x:String>Damaged</x:String>
+                                    <x:String>Lost</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15" Margin="0,10,0,0">
+                        <Button Grid.Column="0" Text="Update" BackgroundColor="#3D3D9E" TextColor="White" FontAttributes="Bold" Clicked="OnSaveUpdateClicked"/>
+                        <Button Grid.Column="1" Text="Cancel" BackgroundColor="#555555" TextColor="White" Clicked="OnCloseEditClicked"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

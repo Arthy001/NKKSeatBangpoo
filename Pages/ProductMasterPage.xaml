@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="NKKSeatBangpoo.Pages.ProductMasterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="🗂️ Product Master"
+    BackgroundColor="#1A1A2E"
+    Loaded="OnPageLoaded">
+
+    <Grid>
+        <!-- Main Content -->
+        <Grid RowDefinitions="Auto,Auto,*" Padding="16">
+
+            <!-- Header -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,10,0,16">
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                    <Label Text="🗂️ Product Master" FontSize="26" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="ข้อมูล Part ทั้งหมดจาก ISUZU Kanban System"
+                           FontSize="13" TextColor="#8888BB"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+                    <Button Text="🚚 Import ISUZU" 
+                            BackgroundColor="#2E7D4F" TextColor="White" 
+                            FontAttributes="Bold" Padding="15,0" HeightRequest="40"
+                            Clicked="OnShowImportIsuzuPopupClicked"/>
+                    <Button Text="🚗 Import TOYOTA" 
+                            BackgroundColor="#3D3D9E" TextColor="White" 
+                            FontAttributes="Bold" Padding="15,0" HeightRequest="40"
+                            Clicked="OnShowImportToyotaPopupClicked"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Search & Summary Bar -->
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="12" Margin="0,0,0,16">
+                <!-- Search -->
+                <Border Grid.Column="0" BackgroundColor="#2A2A4E"
+                        StrokeShape="RoundRectangle 25" Stroke="#4444AA" Padding="12,0">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <Label Grid.Column="0" Text="🔍" FontSize="16"
+                               VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <Entry Grid.Column="1" x:Name="SearchEntry"
+                               Placeholder="ค้นหา NHK Part No., Part Name, Model..."
+                               PlaceholderColor="#6666AA" TextColor="White"
+                               BackgroundColor="Transparent"
+                               TextChanged="OnSearchTextChanged"/>
+                    </Grid>
+                </Border>
+
+                <!-- Brand Filter -->
+                <HorizontalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                    <Button x:Name="BtnFilterAll" Text="ALL" 
+                            BackgroundColor="#444466" TextColor="White" Padding="12,0" HeightRequest="35"
+                            Clicked="OnFilterBrandClicked" Opacity="1.0"/>
+                    <Button x:Name="BtnFilterIsuzu" Text="ISUZU" 
+                            BackgroundColor="#2E7D4F" TextColor="White" Padding="12,0" HeightRequest="35"
+                            Clicked="OnFilterBrandClicked" Opacity="0.5"/>
+                    <Button x:Name="BtnFilterToyota" Text="TOYOTA" 
+                            BackgroundColor="#3D3D9E" TextColor="White" Padding="12,0" HeightRequest="35"
+                            Clicked="OnFilterBrandClicked" Opacity="0.5"/>
+                </HorizontalStackLayout>
+
+                <Border Grid.Column="2" BackgroundColor="#2A2A4E"
+                        StrokeShape="RoundRectangle 10" Stroke="#4444AA" Padding="16,8"
+                        VerticalOptions="Center">
+                    <VerticalStackLayout Spacing="0">
+                        <Label Text="รายการ" TextColor="#8888BB" FontSize="10"/>
+                        <Label x:Name="LblTotalCount" Text="0"
+                               TextColor="#AAAAFF" FontSize="18" FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+                <ActivityIndicator Grid.Column="3" x:Name="LoadingIndicator"
+                                   IsRunning="False" IsVisible="False"
+                                   Color="#4444AA" WidthRequest="36" HeightRequest="36"/>
+            </Grid>
+
+            <!-- Header Row for Table -->
+            <Grid Grid.Row="2" RowDefinitions="Auto,*">
+                <Border Grid.Row="0" BackgroundColor="#2A2A4E"
+                        StrokeShape="RoundRectangle 8" Padding="12,10" Margin="0,0,0,4">
+                    <Grid ColumnDefinitions="50,150,100,100,*,*,120,80,100,100,100,100">
+                        <Label Grid.Column="0" Text="#" TextColor="#AAAAFF"
+                               FontAttributes="Bold" FontSize="12" HorizontalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Part Code" TextColor="#AAAAFF"
+                               FontAttributes="Bold" FontSize="12"/>
+                        <Label Grid.Column="2" Text="Customer" TextColor="#AAAAFF"
+                            FontAttributes="Bold" FontSize="12"/>
+                        <Label Grid.Column="3" Text="Code" TextColor="#AAAAFF"
+                            FontAttributes="Bold" FontSize="12"/>
+                        <Label Grid.Column="4" Text="Customer Part" TextColor="#AAAAFF"
+                            FontAttributes="Bold" FontSize="12"/>
+                        <Label Grid.Column="5" Text="NHK Part No." TextColor="#AAAAFF"
+                               FontAttributes="Bold" FontSize="12"/>
+                        <Label Grid.Column="6" Text="K/B Code" TextColor="#AAAAFF"
+                               FontAttributes="Bold" FontSize="12"/>
+                        <Label Grid.Column="7" Text="K/B Set" TextColor="#AAAAFF"
+                               FontAttributes="Bold" FontSize="12"/>
+                        <Label Grid.Column="8" Text="Model" TextColor="#AAAAFF"
+                               FontAttributes="Bold" FontSize="12"/>
+                        <Label Grid.Column="9" Text="Type" TextColor="#AAAAFF"
+                               FontAttributes="Bold" FontSize="12"/>
+                        <Label Grid.Column="10" Text="Cover" TextColor="#AAAAFF"
+                               FontAttributes="Bold" FontSize="12"/>
+                        <Label Grid.Column="11" Text="Active" TextColor="#AAAAFF"
+                               FontAttributes="Bold" FontSize="12" HorizontalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Data List -->
+                <CollectionView Grid.Row="1" x:Name="ProductList" BackgroundColor="Transparent">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,4"
+                                    BackgroundColor="#20202E"
+                                    StrokeShape="RoundRectangle 6"
+                                    Stroke="#333355" StrokeThickness="1" Padding="12,10">
+                                <Grid ColumnDefinitions="50,150,100,100,*,*,120,80,100,100,100,100">
+                                    <Label Grid.Column="0" Text="{Binding Index}"
+                                           TextColor="#8888AA" FontSize="13" HorizontalOptions="Center"/>
+                                    <Label Grid.Column="1" Text="{Binding PartCode}"
+                                           TextColor="#CCCCFF" FontSize="13" FontAttributes="Bold"/>
+                                    <Label Grid.Column="2" Text="{Binding CustomerName}"
+                                        TextColor="{Binding CustomerColor}" FontSize="13"/>
+                                    <Label Grid.Column="3" Text="{Binding Code}"
+                                        TextColor="#CCCCFF" FontSize="13"/>
+                                    <VerticalStackLayout Grid.Column="4" Spacing="0">
+                                        <Label Text="{Binding CustomerPartNo}"
+                                            TextColor="White" FontSize="13" FontAttributes="Bold"/>
+                                        <Label Text="{Binding CustomerPartName}"
+                                            TextColor="#8888BB" FontSize="10"/>
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="5" Text="{Binding NHKPartNo}"
+                                           TextColor="#CCCCFF" FontSize="13" FontAttributes="Bold"/>
+                                    <Label Grid.Column="6" Text="{Binding KanbanCode}"
+                                           TextColor="#AAAAFF" FontSize="13"/> 
+                                    <Label Grid.Column="7" Text="{Binding KanbanSet}"
+                                           TextColor="#AACCAA" FontSize="13"/>
+                                    <Label Grid.Column="8" Text="{Binding Model}"
+                                           TextColor="#88AACC" FontSize="13"/>
+                                    <Label Grid.Column="9" Text="{Binding Type}"
+                                           TextColor="White" FontSize="13"/>
+                                    <Label Grid.Column="10" Text="{Binding Cover}"
+                                           TextColor="White" FontSize="13"/>
+                                    <Label Grid.Column="11" Text="{Binding IsActiveText}"
+                                           TextColor="{Binding IsActiveColor}"
+                                           FontSize="13" HorizontalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Grid>
+
+        <!-- IMPORT POPUP OVERLAY -->
+        <Grid x:Name="ImportPopup" BackgroundColor="#CC000000" IsVisible="False" Padding="20">
+            <Border BackgroundColor="#1C1C3E" Stroke="#3D3D9E" StrokeThickness="1" 
+                    Padding="30" StrokeShape="RoundRectangle 20"
+                    VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="500">
+                <VerticalStackLayout Spacing="20">
+                    <Label x:Name="LblPopupTitle" Text="📥 Import Product Master" FontSize="22" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="เลือกไฟล์ Excel (.xlsx) เพื่อนำเข้าพิกัดข้อมูลสินค้า" TextColor="#8888BB" HorizontalOptions="Center" Margin="0,-10,0,0"/>
+
+                    <Border BackgroundColor="#0F0F2D" Stroke="#333355" StrokeShape="RoundRectangle 10" Padding="15" Margin="0,10">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="ไฟล์ที่เลือก:" TextColor="#AAAACC" FontSize="12"/>
+                            <Label x:Name="LblSelectedFileName" Text="ยังไม่ได้เลือกไฟล์" TextColor="White" FontSize="14" FontAttributes="Italic"/>
+                            <Button Text="📁 Browse File" BackgroundColor="#2E2E7E" TextColor="White" Clicked="OnBrowseFileClicked" HorizontalOptions="Start"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+                        <Button x:Name="BtnConfirmImport" Grid.Column="0" Text="🚀 Import to DB" 
+                                BackgroundColor="#2E7D4F" TextColor="White" FontAttributes="Bold" 
+                                IsEnabled="False" Clicked="OnConfirmImportClicked"/>
+                        <Button Grid.Column="1" Text="Cancel" BackgroundColor="#555555" TextColor="White" Clicked="OnCloseImportPopupClicked"/>
+                    </Grid>
+
+                    <VerticalStackLayout x:Name="ImportStatusLayout" IsVisible="False" Spacing="5" Margin="0,10,0,0">
+                        <ActivityIndicator IsRunning="True" Color="#44DD88" HeightRequest="30"/>
+                        <Label x:Name="LblPopupImportStatus" Text="กำลังเตรียมความพร้อม..." TextColor="#44DD88" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

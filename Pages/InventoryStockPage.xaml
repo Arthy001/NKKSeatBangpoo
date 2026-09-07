@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="NKKSeatBangpoo.Pages.InventoryStockPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="📦 Inventory Stock"
+    BackgroundColor="#1A1A2E"
+    Loaded="OnPageLoaded">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="30">
+
+        <!-- Header & Mode Tabs -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,10,0,16">
+            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                <Label Text="📦 Inventory Stock" FontSize="26" FontAttributes="Bold" TextColor="White"/>
+                <Label Text="ระบบจัดการและตรวจสอบสินค้าคงคลัง (Real-time)"
+                       FontSize="13" TextColor="#8888BB"/>
+            </VerticalStackLayout>
+            
+            <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+                <Button x:Name="BtnOverview" Text="Dashboard" 
+                        BackgroundColor="#4444AA" TextColor="White" CornerRadius="8"
+                        Clicked="OnOverviewClicked" WidthRequest="120"/>
+                <Button x:Name="BtnHistory" Text="Traceability" 
+                        BackgroundColor="#2A2A4E" TextColor="#AAAAFF" CornerRadius="8"
+                        Clicked="OnHistoryClicked" WidthRequest="120"/>
+                <Button x:Name="BtnExport" Text="📥 Export CSV" 
+                        BackgroundColor="#233A23" TextColor="White" CornerRadius="8"
+                        Clicked="OnExportClicked" WidthRequest="120"/>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- Search & Summary Bar -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12" Margin="0,0,0,16">
+            <Border Grid.Column="0" BackgroundColor="#2A2A4E"
+                    StrokeShape="RoundRectangle 10" Stroke="#4444AA" Padding="12,8">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Label Grid.Column="0" Text="🔍" FontSize="16"
+                           VerticalOptions="Center" Margin="0,0,8,0"/>
+                    <Entry Grid.Column="1" x:Name="SearchEntry"
+                           Placeholder="ค้นหา Order No, Part No, หรือ Tag EPC..."
+                           PlaceholderColor="#6666AA" TextColor="White"
+                           BackgroundColor="Transparent"
+                           TextChanged="OnSearchTextChanged"/>
+                </Grid>
+            </Border>
+            <Border Grid.Column="1" BackgroundColor="#2A2A4E"
+                    StrokeShape="RoundRectangle 10" Stroke="#4444AA" Padding="16,8"
+                    VerticalOptions="Center">
+                <VerticalStackLayout Spacing="0">
+                    <Label Text="จำนวนรวม (Items)" TextColor="#8888BB" FontSize="10" HorizontalOptions="Center"/>
+                    <Label x:Name="LblTotalCount" Text="0"
+                           TextColor="#44DD66" FontSize="18" FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+            <ActivityIndicator Grid.Column="2" x:Name="LoadingIndicator"
+                               IsRunning="False" IsVisible="False"
+                               Color="#4444AA" WidthRequest="36" HeightRequest="36"/>
+        </Grid>
+
+        <!-- Overview Grid -->
+        <Grid Grid.Row="2" x:Name="OverviewContainer" RowDefinitions="Auto,*" IsVisible="True">
+            <Border Grid.Row="0" BackgroundColor="#2A2A4E"
+                    StrokeShape="RoundRectangle 8" Padding="12,10" Margin="0,0,0,4">
+                <Grid ColumnDefinitions="120,110,90,*,80,60,140">
+                    <Label Grid.Column="0" Text="Order No" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12"/>
+                    <Label Grid.Column="1" Text="NHK Part No" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12"/>
+                    <Label Grid.Column="2" Text="K/B" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center"/>
+                    <Label Grid.Column="3" Text="Part Name" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12"/>
+                    <Label Grid.Column="4" Text="Qty" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center"/>
+                    <Label Grid.Column="5" Text="Tags" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center"/>
+                    <Label Grid.Column="6" Text="Last Entry Time" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center"/>
+                </Grid>
+            </Border>
+
+            <CollectionView Grid.Row="1" x:Name="StockList" BackgroundColor="Transparent">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,4"
+                                BackgroundColor="#20202E" StrokeShape="RoundRectangle 6"
+                                Stroke="#333355" StrokeThickness="1" Padding="12,10">
+                            <Grid ColumnDefinitions="120,110,90,*,80,60,140">
+                                <Label Grid.Column="0" Text="{Binding OrderNo}" TextColor="#CCCCFF" FontSize="12" FontAttributes="Bold"/>
+                                <Label Grid.Column="1" Text="{Binding NHKPartNo}" TextColor="#AAAAAA" FontSize="12"/>
+                                <Label Grid.Column="2" Text="{Binding KanbanNo}" TextColor="#AAAAFF" FontSize="12" HorizontalOptions="Center"/>
+                                <Label Grid.Column="3" Text="{Binding PartName}" TextColor="White" FontSize="12"/>
+                                <Label Grid.Column="4" Text="{Binding TotalQty}" TextColor="#44DD66" FontSize="13" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                <Label Grid.Column="5" Text="{Binding TotalTags}" TextColor="#88AACC" FontSize="12" HorizontalOptions="Center"/>
+                                <Label Grid.Column="6" Text="{Binding LastGateEntryTime, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" TextColor="#8888AA" FontSize="11" HorizontalOptions="Center"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!-- History Grid -->
+        <Grid Grid.Row="2" x:Name="HistoryContainer" RowDefinitions="Auto,*" IsVisible="False">
+            <Border Grid.Row="0" BackgroundColor="#2A2A4E"
+                    StrokeShape="RoundRectangle 8" Padding="12,10" Margin="0,0,0,4">
+                <Grid ColumnDefinitions="180,110,105,75,50,140,100">
+                    <Label Grid.Column="0" Text="Card No / EPC" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12"/>
+                    <Label Grid.Column="1" Text="Order No" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12"/>
+                    <Label Grid.Column="2" Text="NHK Part No" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12"/>
+                    <Label Grid.Column="3" Text="Kanban" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center"/>
+                    <Label Grid.Column="4" Text="Qty" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center"/>
+                    <Label Grid.Column="5" Text="Gate Entry Time" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center"/>
+                    <Label Grid.Column="6" Text="Status" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center"/>
+                </Grid>
+            </Border>
+
+            <CollectionView Grid.Row="1" x:Name="HistoryList" BackgroundColor="Transparent">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,4"
+                                BackgroundColor="#20202E" StrokeShape="RoundRectangle 6"
+                                Stroke="#333355" StrokeThickness="1" Padding="12,10">
+                            <Grid ColumnDefinitions="180,110,105,75,50,140,100">
+                                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="0">
+                                    <Label Text="{Binding CardNo}" TextColor="White" FontSize="12" FontAttributes="Bold"/>
+                                    <Label Text="{Binding TagEPC}" TextColor="#8888AA" FontSize="8"/>
+                                </VerticalStackLayout>
+                                <Label Grid.Column="1" Text="{Binding OrderNo}" TextColor="#CCCCFF" FontSize="12" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Label Grid.Column="2" Text="{Binding NHKPartNo}" TextColor="White" FontSize="12" VerticalOptions="Center"/>
+                                <Label Grid.Column="3" Text="{Binding KanbanNo}" TextColor="#AAAAFF" FontSize="12" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label Grid.Column="4" Text="{Binding QtyPerSet}" TextColor="#44DD66" FontSize="12" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label Grid.Column="5" Text="{Binding GateEntryTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" TextColor="#8888AA" FontSize="10" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Border Grid.Column="6" BackgroundColor="#151520" Stroke="{Binding StatusColor}" 
+                                        StrokeShape="RoundRectangle 4" Padding="6,2" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding StatusText}" TextColor="{Binding StatusColor}" FontSize="11"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
+</ContentPage>

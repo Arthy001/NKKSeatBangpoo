@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="NKKSeatBangpoo.Pages.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="🔖 Register RFID"
+    BackgroundColor="#0F0F25"
+    Loaded="OnPageLoaded">
+
+    <Grid>
+        <!-- Background Decor -->
+        <BoxView Color="#1A1A3A" Opacity="0.5" WidthRequest="600" HeightRequest="600" 
+                 CornerRadius="300" HorizontalOptions="End" VerticalOptions="Start" TranslationX="200" TranslationY="-200"/>
+        
+        <Grid RowDefinitions="Auto, *" Padding="20">
+            <!-- Header -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <Label Text="🔖 RFID Registration" FontSize="28" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="เลือกใบสั่งผลิตและลงทะเบียนบัตร" FontSize="13" TextColor="#8888BB"/>
+                </VerticalStackLayout>
+                
+                <Border Grid.Column="1" BackgroundColor="#1A2A1A" Stroke="#44AA66" StrokeThickness="1" 
+                        Padding="15,8" VerticalOptions="Center" StrokeShape="RoundRectangle 10">
+                    <HorizontalStackLayout Spacing="8">
+                        <Ellipse WidthRequest="10" HeightRequest="10" Fill="#44DD66"/>
+                        <Label Text="Scanner Ready" TextColor="#88DD88" FontSize="13" FontAttributes="Bold"/>
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Main Content: Split View -->
+            <Grid Grid.Row="1" ColumnDefinitions="400, *" ColumnSpacing="20">
+                
+                <!-- LEFT: Work Order List -->
+                <Border Grid.Column="0" BackgroundColor="#161633" Stroke="#2A2A5A" StrokeThickness="1" StrokeShape="RoundRectangle 15">
+                    <Grid RowDefinitions="Auto, Auto, *">
+                        <Label Grid.Row="0" Text="📋 Work Order List" TextColor="White" Padding="20,20,20,10" FontSize="16" FontAttributes="Bold"/>
+                        
+                        <!-- Filter Bar -->
+                        <Border Grid.Row="1" Margin="20,0,20,15" BackgroundColor="#0F0F2D" StrokeThickness="0" StrokeShape="RoundRectangle 10" Padding="10,0">
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="🔍" VerticalOptions="Center" TextColor="#666699"/>
+                                <Entry x:Name="SearchOrder" Placeholder="Search Order/WC..." TextColor="White" 
+                                       WidthRequest="300" FontSize="14" TextChanged="OnOrderSearchChanged"/>
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <CollectionView Grid.Row="2" x:Name="OrderList" 
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnOrderSelectionChanged">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" ItemSpacing="2"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="20,15" ColumnDefinitions="*, Auto" BackgroundColor="Transparent">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal" />
+                                                <VisualState x:Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor" Value="#2D2D70" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                            <Label Text="{Binding OrderNo}" TextColor="White" FontSize="16" FontAttributes="Bold"/>
+                                            <Label Text="{Binding WorkCenter}" TextColor="#8888AA" FontSize="12"/>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center">
+                                            <Label Text="{Binding DueDateStr}" TextColor="#AAAAFF" FontSize="11" HorizontalOptions="End"/>
+                                            <Border BackgroundColor="#1A1A3A" Padding="8,2" StrokeShape="RoundRectangle 5" StrokeThickness="0">
+                                                <Label Text="{Binding Status}" TextColor="#44DD88" FontSize="10" FontAttributes="Bold"/>
+                                            </Border>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </Border>
+
+                <!-- RIGHT: Work Order Details -->
+                <Border Grid.Column="1" BackgroundColor="#161633" Stroke="#2A2A5A" StrokeThickness="1" StrokeShape="RoundRectangle 15">
+                    <Grid RowDefinitions="Auto, Auto, *">
+                        <VerticalStackLayout Grid.Row="0" Padding="20">
+                            <Label x:Name="LblDetailHeader" Text="📦 Order Details" FontSize="18" FontAttributes="Bold" TextColor="White"/>
+                            <Label x:Name="LblDetailSubHeader" Text="เลือกรายการที่ต้องการลงทะเบียน" FontSize="12" TextColor="#8888AA"/>
+                        </VerticalStackLayout>
+
+                        <!-- Detail Columns Header -->
+                        <Grid Grid.Row="1" ColumnDefinitions="30, *, 50, 100, 100, 100, 90, *" Padding="20,10" BackgroundColor="#1A1A3F">
+                            <Label Grid.Column="0" Text="#" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11"/>
+                            <Label Grid.Column="1" Text="NHK Part No" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11"/>
+                            <Label Grid.Column="2" Text="Ln" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                            <Label Grid.Column="3" Text="Code" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                            <Label Grid.Column="4" Text="Kanban No" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                            <Label Grid.Column="5" Text="Progress" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                            <Label Grid.Column="6" Text="Status" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Center"/>
+                            <Label Grid.Column="7" Text="Card No / EPC" TextColor="#AAAAFF" FontAttributes="Bold" FontSize="11" HorizontalOptions="Start"/>
+                        </Grid>
+
+                        <CollectionView Grid.Row="2" x:Name="DetailList" 
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnDetailSelectionChanged">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,1" BackgroundColor="Transparent" StrokeThickness="0" Padding="20,15">
+                                        <Grid ColumnDefinitions="30, *, 50, 100, 100, 100, 90, *">
+                                            <Label Grid.Column="0" Text="{Binding RowIndex}" TextColor="#8888AA" VerticalOptions="Center" FontSize="11"/>
+                                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                                <Label Text="{Binding ItemNumber}" TextColor="White" FontAttributes="Bold" FontSize="13"/>
+                                                <Label Text="{Binding ItemName}" TextColor="#8888AA" FontSize="10" LineBreakMode="TailTruncation"/>
+                                            </VerticalStackLayout>
+                                            
+                                            <Label Grid.Column="2" Text="{Binding LineNo}" TextColor="White" VerticalOptions="Center" HorizontalOptions="Center" FontSize="11"/>
+                                            <Label Grid.Column="3" Text="{Binding CodeNo}" TextColor="#CCCCEE" VerticalOptions="Center" HorizontalOptions="Center" FontSize="11"/>
+                                            <Label Grid.Column="4" Text="{Binding KanbanNo}" TextColor="#CCCCEE" VerticalOptions="Center" HorizontalOptions="Center" FontSize="11"/>
+                                            
+                                            <VerticalStackLayout Grid.Column="5" Spacing="4" VerticalOptions="Center">
+                                                <Label Text="{Binding ProgressText}" HorizontalOptions="Center" FontSize="9" TextColor="#88DD88"/>
+                                                <ProgressBar Progress="{Binding ProgressVal}" ProgressColor="#44AA66" BackgroundColor="#222244" HeightRequest="3"/>
+                                            </VerticalStackLayout>
+
+                                            <Border Grid.Column="6" BackgroundColor="{Binding StatusBgColor}" Padding="6,2" StrokeShape="RoundRectangle 5" StrokeThickness="0" HorizontalOptions="Center" VerticalOptions="Center">
+                                                <Label Text="{Binding Status}" TextColor="White" FontSize="9" FontAttributes="Bold"/>
+                                            </Border>
+
+                                            <VerticalStackLayout Grid.Column="7" VerticalOptions="Center" Spacing="0" HorizontalOptions="Start">
+                                                <Label Text="{Binding CardNo}" TextColor="#44DD66" FontSize="13" FontAttributes="Bold" HorizontalOptions="Start"/>
+                                                <Label Text="{Binding TagEPC}" TextColor="#666699" FontSize="10" HorizontalOptions="Start"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </Border>
+
+            </Grid>
+        </Grid>
+
+        <!-- REGISTRATION POPUP (OVERLAY) -->
+        <Grid x:Name="PopupOverlay" IsVisible="False" BackgroundColor="#BB000000" Padding="40">
+            <Border BackgroundColor="#1E1E45" WidthRequest="550" VerticalOptions="Center" 
+                    Stroke="#4444AA" StrokeThickness="2" StrokeShape="RoundRectangle 20"
+                    Padding="30">
+                <VerticalStackLayout Spacing="20">
+                    <!-- Popup Header -->
+                    <Grid ColumnDefinitions="*, Auto">
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label x:Name="PopupPartNo" Text="NI2761-10000" FontSize="22" FontAttributes="Bold" TextColor="White"/>
+                            <Label x:Name="PopupLineInfo" Text="Line 1 | Order: S0008859" FontSize="13" TextColor="#8888BB"/>
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1" Text="✕" FontSize="20" BackgroundColor="Transparent" TextColor="#888888" Clicked="OnClosePopupClicked"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="#2A2A5A"/>
+
+                    <!-- Step 1: Batch Qty -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="1. เลือกจำนวนใน Batch (เบาะต่อชุด)" TextColor="#AAAAFF" FontAttributes="Bold"/>
+                        <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto" ColumnSpacing="15" RowSpacing="10">
+                            <!-- Toyota -->
+                            <Button Grid.Row="0" Grid.Column="0" x:Name="Btn1" Text="1 ตัว (Toyota)" 
+                                    BackgroundColor="#2A2A5E" TextColor="White" HeightRequest="50"
+                                    Clicked="OnBatchClicked" CommandParameter="1"/>
+                            
+                            <!-- Isuzu options -->
+                            <Button Grid.Row="0" Grid.Column="1" x:Name="Btn7" Text="7 ตัว (Isuzu)" 
+                                    BackgroundColor="#2A2A5E" TextColor="White" HeightRequest="50"
+                                    Clicked="OnBatchClicked" CommandParameter="7"/>
+                                    
+                            <Button Grid.Row="1" Grid.Column="0" x:Name="Btn8" Text="8 ตัว (Isuzu)" 
+                                    BackgroundColor="#2A2A5E" TextColor="White" HeightRequest="50"
+                                    Clicked="OnBatchClicked" CommandParameter="8"/>
+                                    
+                            <Button Grid.Row="1" Grid.Column="1" x:Name="Btn15" Text="15 ตัว (Isuzu)" 
+                                    BackgroundColor="#2A2A5E" TextColor="White" HeightRequest="50"
+                                    Clicked="OnBatchClicked" CommandParameter="15"/>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Step 2: Scan RFID -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="2. สแกน RFID Tag (URW703)" TextColor="#AAFFAA" FontAttributes="Bold"/>
+                        <Border BackgroundColor="#0F0F2D" Padding="15" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#44AA66">
+                            <Grid ColumnDefinitions="Auto, *">
+                                <Label Grid.Column="0" Text="🔖" FontSize="24" VerticalOptions="Center" Margin="0,0,10,0"/>
+                                <Entry Grid.Column="1" x:Name="EntryRfid" Placeholder="สแกน Tag ตรงนี้..." 
+                                       TextColor="#88FF88" FontSize="18" FontAttributes="Bold" MaxLength="24"
+                                       TextChanged="OnPopupRfidChanged" Completed="OnPopupRfidCompleted"/>
+                            </Grid>
+                        </Border>
+                        <Label x:Name="LblPopupStatus" Text="รอการสแกน..." TextColor="#888888" HorizontalOptions="Center" FontSize="12"/>
+                    </VerticalStackLayout>
+
+                    <!-- Step 3: Action -->
+                    <Button Text="ตกลง (บันทึก)" FontSize="18" FontAttributes="Bold"
+                            BackgroundColor="#44AA66" TextColor="White" HeightRequest="60"
+                            Clicked="OnConfirmClicked"/>
+                    
+                    <Label Text="💡 ระบบจะล้างค่า Tag หลังจากการกดยืนยัน" TextColor="#444466" FontSize="11" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

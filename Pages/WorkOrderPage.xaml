@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="NKKSeatBangpoo.Pages.WorkOrderPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="📋 Work Orders"
+    BackgroundColor="#1A1A2E"
+    Loaded="OnPageLoaded">
+
+    <Grid>
+        <!-- Main Content -->
+        <Grid ColumnDefinitions="360,*" Padding="30" ColumnSpacing="20">
+
+            <!-- LEFT: Work Order List -->
+            <Grid Grid.Column="0" RowDefinitions="Auto,Auto,*">
+
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,10,0,16">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                        <Label Text="📋 Work Orders" FontSize="22" FontAttributes="Bold" TextColor="White"/>
+                        <Label Text="เลือก Order เพื่อดูรายละเอียด" FontSize="12" TextColor="#8888BB"/>
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1" Text="📥 Import"
+                            BackgroundColor="#2E7D4F" TextColor="White"
+                            CornerRadius="8" Padding="15,0" HeightRequest="40"
+                            Clicked="OnShowImportPopupClicked"/>
+                </Grid>
+
+                <!-- Status Filter -->
+                <HorizontalStackLayout Grid.Row="1" Spacing="8" Margin="0,0,0,12">
+                    <Button Text="ทั้งหมด" x:Name="BtnAll" FontSize="12"
+                            BackgroundColor="#3D3D9E" TextColor="White"
+                            CornerRadius="6" HeightRequest="32" Padding="12,0"
+                            Clicked="OnFilterClicked" CommandParameter="All"/>
+                    <Button Text="Open" x:Name="BtnOpen" FontSize="12"
+                            BackgroundColor="#1C1C4E" TextColor="#8888CC"
+                            CornerRadius="6" HeightRequest="32" Padding="12,0"
+                            Clicked="OnFilterClicked" CommandParameter="Open"/>
+                    <Button Text="In-Progress" x:Name="BtnInProgress" FontSize="12"
+                            BackgroundColor="#1C1C4E" TextColor="#8888CC"
+                            CornerRadius="6" HeightRequest="32" Padding="12,0"
+                            Clicked="OnFilterClicked" CommandParameter="In-Progress"/>
+                    <Button Text="Closed" x:Name="BtnClosed" FontSize="12"
+                            BackgroundColor="#1C1C4E" TextColor="#8888CC"
+                            CornerRadius="6" HeightRequest="32" Padding="12,0"
+                            Clicked="OnFilterClicked" CommandParameter="Closed"/>
+                </HorizontalStackLayout>
+
+                <!-- Order List -->
+                <CollectionView Grid.Row="2" x:Name="OrderList"
+                                BackgroundColor="Transparent"
+                                SelectionMode="Single"
+                                SelectionChanged="OnOrderSelectionChanged">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,6"
+                                    BackgroundColor="#232336"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="{Binding StatusColor}"
+                                    StrokeThickness="1.5" Padding="14,12">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding OrderNo}"
+                                           TextColor="White" FontSize="15" FontAttributes="Bold"/>
+                                    <Border Grid.Row="0" Grid.Column="1"
+                                            BackgroundColor="{Binding StatusBgColor}"
+                                            StrokeShape="RoundRectangle 4" Padding="8,3">
+                                        <Label Text="{Binding Status}"
+                                               TextColor="White" FontSize="11"/>
+                                    </Border>
+                                    <Label Grid.Row="1" Grid.ColumnSpan="2"
+                                           Text="{Binding WorkCenter}"
+                                           TextColor="#8888AA" FontSize="11" Margin="0,3,0,0"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2"
+                                           Text="{Binding DueDateStr}"
+                                           TextColor="#6666AA" FontSize="11"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <!-- RIGHT: Work Order Detail -->
+            <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*">
+
+                <Label Grid.Row="0" x:Name="LblDetailHeader"
+                       Text="← เลือก Work Order จากด้านซ้าย"
+                       FontSize="18" FontAttributes="Bold" TextColor="#8888BB"
+                       Margin="0,10,0,16"/>
+
+                <!-- Order Summary -->
+                <Border Grid.Row="1" x:Name="PanelSummary" IsVisible="False"
+                        BackgroundColor="#232336" StrokeShape="RoundRectangle 10"
+                        Stroke="#4444AA" Padding="16" Margin="0,0,0,12">
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Work Center" TextColor="#8888AA" FontSize="11"/>
+                            <Label x:Name="LblWC" TextColor="White" FontSize="13" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="Due Date" TextColor="#8888AA" FontSize="11"/>
+                            <Label x:Name="LblDue" TextColor="#AADDFF" FontSize="13"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="2">
+                            <Label Text="Progress" TextColor="#8888AA" FontSize="11"/>
+                            <Label x:Name="LblProgress" TextColor="#44DD88" FontSize="13" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- Detail Table Header -->
+                <Grid Grid.Row="2" RowDefinitions="Auto,*">
+                    <Border Grid.Row="0" BackgroundColor="#2A2A4E"
+                            StrokeShape="RoundRectangle 8" Padding="12,10" Margin="0,0,0,4">
+                        <Grid ColumnDefinitions="30, 60, 100, 30, 40, 90, *, 40, 40, 40, 70">
+                            <Label Grid.Column="0" Text="Ln" TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10"/>
+                            <Label Grid.Column="1" Text="Code" TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10" HorizontalOptions="Center"/>
+                            <Label Grid.Column="2" Text="NHK Part No." TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10"/>
+                            <Label Grid.Column="3" Text="Slp" TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10" HorizontalOptions="Center"/>
+                            <Label Grid.Column="4" Text="KB" TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10" HorizontalOptions="Center"/>
+                            <Label Grid.Column="5" Text="Kanban No" TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10" HorizontalOptions="Center"/>
+                            <Label Grid.Column="6" Text="Part Name (from Order)" TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10"/>
+                            <Label Grid.Column="7" Text="GL" TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10" HorizontalOptions="Center"/>
+                            <Label Grid.Column="8" Text="RG" TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10" HorizontalOptions="Center"/>
+                            <Label Grid.Column="9" Text="RM" TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10" HorizontalOptions="Center"/>
+                            <Label Grid.Column="10" Text="Status" TextColor="#AAAAFF"
+                                   FontAttributes="Bold" FontSize="10" HorizontalOptions="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <CollectionView Grid.Row="1" x:Name="DetailList" BackgroundColor="Transparent">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,0,4"
+                                        BackgroundColor="#1E1E2E"
+                                        StrokeShape="RoundRectangle 6"
+                                        Stroke="#333355" StrokeThickness="1" Padding="12,10">
+                                    <Grid ColumnDefinitions="30, 60, 100, 30, 40, 90, *, 40, 40, 40, 70">
+                                        <Label Grid.Column="0" Text="{Binding LineNo}"
+                                               TextColor="#7777AA" FontSize="10"/>
+                                        <Label Grid.Column="1" Text="{Binding CodeNo}"
+                                               TextColor="#AAAAFF" FontSize="10" HorizontalOptions="Center"/>
+                                        <Label Grid.Column="2" Text="{Binding ItemNumber}"
+                                               TextColor="#CCCCFF" FontSize="11" FontAttributes="Bold"/>
+                                        <Label Grid.Column="3" Text="{Binding Slip}"
+                                               TextColor="#AAAAFF" FontSize="10" HorizontalOptions="Center"/>
+                                        <Label Grid.Column="4" Text="{Binding KBNo}"
+                                               TextColor="#AAAAFF" FontSize="10" HorizontalOptions="Center"/>
+                                        <Label Grid.Column="5" Text="{Binding KanbanNo}"
+                                               TextColor="#AAAAFF" FontSize="10" HorizontalOptions="Center"/>
+                                        <Label Grid.Column="6" Text="{Binding ItemName}"
+                                               TextColor="#8888AA" FontSize="10" LineBreakMode="TailTruncation"/>
+                                        <Label Grid.Column="7" Text="{Binding TargetQty}"
+                                               TextColor="White" FontSize="11"
+                                               HorizontalOptions="Center" FontAttributes="Bold"/>
+                                        <Label Grid.Column="8" Text="{Binding RegisteredQty}"
+                                               TextColor="#44DD88" FontSize="11"
+                                               HorizontalOptions="Center" FontAttributes="Bold"/>
+                                        <Label Grid.Column="9" Text="{Binding RemainingQty}"
+                                               TextColor="{Binding RemainingColor}" FontSize="11"
+                                               HorizontalOptions="Center" FontAttributes="Bold"/>
+                                        <Border Grid.Column="10"
+                                                BackgroundColor="{Binding StatusBgColor}"
+                                                StrokeShape="RoundRectangle 4"
+                                                Padding="4,2" HorizontalOptions="Center">
+                                            <Label Text="{Binding Status}"
+                                                   TextColor="White" FontSize="9"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- IMPORT POPUP OVERLAY -->
+        <Grid x:Name="ImportPopup" BackgroundColor="#CC000000" IsVisible="False" Padding="20">
+            <Border BackgroundColor="#1C1C3E" Stroke="#3D3D9E" StrokeThickness="1" 
+                    Padding="30" StrokeShape="RoundRectangle 20"
+                    VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="500">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="📥 Import Work Order" FontSize="22" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                    
+                    <Border BackgroundColor="#0F0F2D" Stroke="#333355" StrokeShape="RoundRectangle 10" Padding="15" Margin="0,10">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="ไฟล์ที่เลือก:" TextColor="#AAAACC" FontSize="12"/>
+                            <Label x:Name="LblSelectedFileName" Text="ยังไม่ได้เลือกไฟล์" TextColor="White" FontSize="14" FontAttributes="Italic"/>
+                            
+                            <HorizontalStackLayout Spacing="10">
+                                <Button Text="📁 ISUZU (Excel)" BackgroundColor="#1A5A35" FontSize="12" Clicked="OnBrowseIsuzuClicked"/>
+                                <Button Text="📁 TOYOTA (Text)" BackgroundColor="#7E2E2E" FontSize="12" Clicked="OnBrowseToyotaClicked"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+                        <Button x:Name="BtnConfirmImport" Grid.Column="0" Text="🚀 Import to DB" 
+                                BackgroundColor="#2E7D4F" TextColor="White" FontAttributes="Bold" 
+                                IsEnabled="False" Clicked="OnConfirmImportClicked"/>
+                        <Button Grid.Column="1" Text="Cancel" BackgroundColor="#555555" TextColor="White" Clicked="OnCloseImportPopupClicked"/>
+                    </Grid>
+
+                    <VerticalStackLayout x:Name="ImportStatusLayout" IsVisible="False" Spacing="5" Margin="0,10,0,0">
+                        <ActivityIndicator IsRunning="True" Color="#44DD88" HeightRequest="30"/>
+                        <Label x:Name="LblPopupImportStatus" Text="กำลังดำเนินการ..." TextColor="#44DD88" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

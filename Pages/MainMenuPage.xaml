@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="NKKSeatBangpoo.Pages.MainMenuPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Main Menu"
+    BackgroundColor="#1A1A2E">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="30">
+
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="6" Margin="0,20,0,30" HorizontalOptions="Center">
+            <Label Text="🪑 NHK Seat Bangpoo" FontSize="32" FontAttributes="Bold"
+                   TextColor="White" HorizontalOptions="Center"/>
+            <Label Text="RFID Production Management System"
+                   FontSize="14" TextColor="#8888BB" HorizontalOptions="Center"/>
+            <BoxView HeightRequest="2" Color="#4444AA"
+                     Margin="0,10,0,0" WidthRequest="320" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+
+        <!-- Menu Grid 3x3 -->
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,*,*"
+              RowDefinitions="*,*,*"
+              ColumnSpacing="16" RowSpacing="16"
+              VerticalOptions="Center">
+
+            <!-- 1: Product Master -->
+            <Border Grid.Row="0" Grid.Column="0"
+                    BackgroundColor="#232340" StrokeShape="RoundRectangle 14"
+                    Stroke="#6644BB" StrokeThickness="1.5" Padding="20">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnProductMasterClicked" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                    <Label Text="🗂️" FontSize="40" HorizontalOptions="Center"/>
+                    <Label Text="Product Master" FontSize="16" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="ดูข้อมูล Part ทั้งหมด"
+                           FontSize="11" TextColor="#AAAACC"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 2: Work Order -->
+            <Border Grid.Row="0" Grid.Column="1"
+                    BackgroundColor="#23302A" StrokeShape="RoundRectangle 14"
+                    Stroke="#4488AA" StrokeThickness="1.5" Padding="20">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnWorkOrderClicked" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                    <Label Text="📋" FontSize="40" HorizontalOptions="Center"/>
+                    <Label Text="Work Orders" FontSize="16" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="ดูและติดตาม Work Order"
+                           FontSize="11" TextColor="#AACCAA"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 3: Register RFID -->
+            <Border Grid.Row="0" Grid.Column="2"
+                    BackgroundColor="#233A23" StrokeShape="RoundRectangle 14"
+                    Stroke="#44AA66" StrokeThickness="1.5" Padding="20">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnRegisterClicked" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                    <Label Text="🔖" FontSize="40" HorizontalOptions="Center"/>
+                    <Label Text="Register RFID" FontSize="16" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="ผูก Tag กับ Work Order"
+                           FontSize="11" TextColor="#AACCAA"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 4: Card Master -->
+            <Border Grid.Row="1" Grid.Column="0"
+                    BackgroundColor="#232336" StrokeShape="RoundRectangle 14"
+                    Stroke="#AA8855" StrokeThickness="1.5" Padding="20">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCardMasterClicked" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                    <Label Text="🎴" FontSize="40" HorizontalOptions="Center"/>
+                    <Label Text="Card Master" FontSize="16" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="ลงทะเบียนบัตร RFID ใหม่"
+                           FontSize="11" TextColor="#AAAA88"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 5: Manage Card (Recycle) -->
+            <Border Grid.Row="1" Grid.Column="1"
+                    BackgroundColor="#232320" StrokeShape="RoundRectangle 14"
+                    Stroke="#8866BB" StrokeThickness="1.5" Padding="20">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTagManagementClicked" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                    <Label Text="🔄" FontSize="40" HorizontalOptions="Center"/>
+                    <Label Text="Manage Card" FontSize="16" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="คืนบัตร (Recycle)"
+                           FontSize="11" TextColor="#AACCAA"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 6: Dashboard -->
+            <Border Grid.Row="1" Grid.Column="2"
+                    BackgroundColor="#231A35" StrokeShape="RoundRectangle 14"
+                    Stroke="#4488FF" StrokeThickness="1.5" Padding="20">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnDashboardClicked" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                    <Label Text="📊" FontSize="40" HorizontalOptions="Center"/>
+                    <Label Text="Dashboard" FontSize="16" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="สรุปผลการทำงานรายวัน"
+                           FontSize="11" TextColor="#AAAACC"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 7: Gate Entry -->
+            <Border Grid.Row="2" Grid.Column="0"
+                    BackgroundColor="#1E1E40" StrokeShape="RoundRectangle 14"
+                    Stroke="#44DD66" StrokeThickness="1.5" Padding="20">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnGateEntryClicked" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                    <Label Text="📡" FontSize="40" HorizontalOptions="Center"/>
+                    <Label Text="Gate Entry" FontSize="16" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="สแกนรับเข้าคลัง (Gate)"
+                           FontSize="11" TextColor="#AACCAA"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 8: Inventory Stock -->
+            <Border Grid.Row="2" Grid.Column="1"
+                    BackgroundColor="#23203A" StrokeShape="RoundRectangle 14"
+                    Stroke="#AA66DD" StrokeThickness="1.5" Padding="20">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnInventoryStockClicked" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                    <Label Text="📦" FontSize="40" HorizontalOptions="Center"/>
+                    <Label Text="Inventory Stock" FontSize="16" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center"/>
+                    <Label Text="จัดการสินค้าคงคลัง"
+                           FontSize="11" TextColor="#CAAACC"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+        </Grid>
+
+        <!-- Phase 4 Section (Separated) -->
+        <VerticalStackLayout Grid.Row="1" VerticalOptions="End" Margin="0,0,0,-40">
+             <Label Text="--- Phase 4 (Auto Export Coming Soon) ---" TextColor="#444466" HorizontalOptions="Center" FontSize="11" Margin="0,10"/>
+        </VerticalStackLayout>
+
+        <!-- Footer -->
+        <Label Grid.Row="2"
+               Text="NHK Technical Service Co., Ltd. | RFID System v1.1"
+               FontSize="11" TextColor="#444466"
+               HorizontalOptions="Center" Margin="0,16,0,0"/>
+    </Grid>
+</ContentPage>
